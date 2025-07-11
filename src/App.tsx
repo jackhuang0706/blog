@@ -144,20 +144,41 @@ function App() {
   useEffect(() => {
     // 處理直接 URL 訪問
     const handleDirectAccess = () => {
-      const path = window.location.pathname;
-      const blogPath = '/blog/';
+      const urlParams = new URLSearchParams(window.location.search);
+      const pathParam = urlParams.get('path');
       
-      if (path.startsWith(blogPath)) {
-        const remainingPath = path.slice(blogPath.length);
-        
-        if (remainingPath === 'about' || remainingPath === 'about/') {
+      if (pathParam) {
+        // 處理從 404.html 重定向過來的路徑
+        if (pathParam === 'about' || pathParam === 'about/') {
           setSelected('about.md');
           setShowTagsPage(false);
           setSelectedTag(null);
-        } else if (remainingPath === 'sample' || remainingPath === 'sample/') {
+        } else if (pathParam === 'sample' || pathParam === 'sample/') {
           setSelected('sample.md');
           setShowTagsPage(false);
           setSelectedTag(null);
+        }
+        
+        // 清除 URL 參數
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+      } else {
+        // 處理直接路徑訪問
+        const path = window.location.pathname;
+        const blogPath = '/blog/';
+        
+        if (path.startsWith(blogPath)) {
+          const remainingPath = path.slice(blogPath.length);
+          
+          if (remainingPath === 'about' || remainingPath === 'about/') {
+            setSelected('about.md');
+            setShowTagsPage(false);
+            setSelectedTag(null);
+          } else if (remainingPath === 'sample' || remainingPath === 'sample/') {
+            setSelected('sample.md');
+            setShowTagsPage(false);
+            setSelectedTag(null);
+          }
         }
       }
     };

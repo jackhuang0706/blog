@@ -4,18 +4,40 @@
     <meta charset="utf-8">
     <title>Lazy Blog</title>
     <script type="text/javascript">
-        // 單頁應用程式路由處理
-        var pathSegmentsToKeep = 1;
-        var l = window.location;
-        l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-        );
+        // 單頁應用程式路由處理 - 修正版本
+        (function(){
+            var redirect = function() {
+                var l = window.location;
+                var path = l.pathname;
+                
+                // 檢查是否在 /blog/ 路徑下
+                if (path.startsWith('/blog/')) {
+                    // 移除 /blog/ 前綴，取得實際路徑
+                    var actualPath = path.replace('/blog/', '');
+                    
+                    // 重定向到主頁面並加上路徑參數
+                    var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/blog/?path=' + encodeURIComponent(actualPath);
+                    
+                    if (l.search) {
+                        redirectUrl += '&' + l.search.slice(1);
+                    }
+                    
+                    if (l.hash) {
+                        redirectUrl += l.hash;
+                    }
+                    
+                    window.location.replace(redirectUrl);
+                } else {
+                    // 如果不在 /blog/ 路徑下，重定向到主頁面
+                    window.location.replace('/blog/');
+                }
+            };
+            
+            redirect();
+        })();
     </script>
 </head>
 <body>
+    <p>正在重新導向...</p>
 </body>
 </html> 
