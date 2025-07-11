@@ -1,43 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Lazy Blog</title>
-    <script type="text/javascript">
-        // 單頁應用程式路由處理 - 修正版本
-        (function(){
-            var redirect = function() {
-                var l = window.location;
-                var path = l.pathname;
-                
-                // 檢查是否在 /blog/ 路徑下
-                if (path.startsWith('/blog/')) {
-                    // 移除 /blog/ 前綴，取得實際路徑
-                    var actualPath = path.replace('/blog/', '');
-                    
-                    // 重定向到主頁面並加上路徑參數
-                    var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/blog/?path=' + encodeURIComponent(actualPath);
-                    
-                    if (l.search) {
-                        redirectUrl += '&' + l.search.slice(1);
-                    }
-                    
-                    if (l.hash) {
-                        redirectUrl += l.hash;
-                    }
-                    
-                    window.location.replace(redirectUrl);
-                } else {
-                    // 如果不在 /blog/ 路徑下，重定向到主頁面
-                    window.location.replace('/blog/');
-                }
-            };
-            
-            redirect();
-        })();
+  <head>
+    <meta http-equiv="refresh" content="0; url=/blog/" />
+    <script>
+      // 讓 SPA 路由能正確 fallback
+      var l = window.location;
+      var path = l.pathname.replace(/^\/blog\//, '');
+      if (path && path !== 'index.html') {
+        window.location.replace('/blog/?p=' + encodeURIComponent(path + l.search + l.hash));
+      }
     </script>
-</head>
-<body>
-    <p>正在重新導向...</p>
-</body>
+  </head>
+  <body></body>
 </html> 
