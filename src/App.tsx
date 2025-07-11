@@ -76,35 +76,20 @@ function App() {
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
     const scanMarkdownFiles = async () => {
-      // 嘗試獲取所有 markdown 檔案
-      const knownFiles = ["about.md", "sample.md", "test.md"]; // 包含已知檔案
+      // 使用已知檔案列表，避免 API 404 錯誤
+      const knownFiles = ["about.md", "sample.md", "test.md"];
       
-      // 嘗試動態獲取檔案列表，如果失敗則使用已知檔案列表
-      let files: string[] = [];
-      
-      try {
-        const response = await fetch('/blog/api/posts');
-        if (response.ok) {
-          files = await response.json();
-        } else {
-          files = knownFiles;
-        }
-      } catch (error) {
-        console.log('API not available, using known files');
-        files = knownFiles;
-      }
-      
-      // 過濾出 .md 檔案
-      files = files.filter(file => file.endsWith('.md'));
+      console.log('Loading files:', knownFiles);
       
       Promise.all(
-        files.map(async (file) => {
+        knownFiles.map(async (file) => {
           const res = await fetch(`/blog/posts/${file}`);
           let text = '';
           if (res.ok) {
             text = await res.text();
           }
           if (!res.ok || text.trim().startsWith('<')) {
+            console.log(`Failed to load ${file}`);
             return {
               file,
               title: file,
