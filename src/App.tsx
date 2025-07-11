@@ -76,93 +76,40 @@ function App() {
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
     const scanMarkdownFiles = async () => {
-      try {
-        // 嘗試獲取 posts 目錄的檔案列表
-        // 如果無法直接獲取，則使用預設檔案列表作為備用
-        const defaultFiles = ["about.md", "sample.md"];
-        
-        // 嘗試動態獲取檔案列表
-        let files: string[] = [];
-        
-        // 方法1: 嘗試從 API 獲取檔案列表
-        try {
-          const response = await fetch('/api/posts');
-          if (response.ok) {
-            files = await response.json();
-          } else {
-            files = defaultFiles;
+      // 使用預設檔案列表，因為 GitHub Pages 無法使用 API
+      const defaultFiles = ["about.md", "sample.md"];
+      
+      Promise.all(
+        defaultFiles.map(async (file) => {
+          const res = await fetch(`/posts/${file}`);
+          let text = '';
+          if (res.ok) {
+            text = await res.text();
           }
-        } catch (error) {
-          // 如果 API 不存在，使用預設檔案列表
-          files = defaultFiles;
-        }
-        
-        // 過濾出 .md 檔案
-        files = files.filter(file => file.endsWith('.md'));
-        
-        Promise.all(
-          files.map(async (file) => {
-            const res = await fetch(`/posts/${file}`);
-            let text = '';
-            if (res.ok) {
-              text = await res.text();
-            }
-            if (!res.ok || text.trim().startsWith('<')) {
-              return {
-                file,
-                title: file,
-                date: null,
-                preview: '檔案不存在',
-              };
-            }
-            const match = text.match(/^#\s+(.+)/m);
-            const { date } = parseFrontmatter(text);
-            const preview = getPreview(text);
+          if (!res.ok || text.trim().startsWith('<')) {
             return {
               file,
-              title: match ? match[1] : file,
-              date,
-              preview,
+              title: file,
+              date: null,
+              preview: '檔案不存在',
             };
-          })
-        ).then((arr) => {
-          arr.sort((a, b) => (b.date || "") > (a.date || "") ? 1 : -1);
-          setPosts(arr);
-        });
-      } catch (error) {
-        console.error('Error scanning markdown files:', error);
-        // 如果出錯，使用預設檔案列表
-        const defaultFiles = ["about.md", "sample.md"];
-        Promise.all(
-          defaultFiles.map(async (file) => {
-            const res = await fetch(`/posts/${file}`);
-            let text = '';
-            if (res.ok) {
-              text = await res.text();
-            }
-            if (!res.ok || text.trim().startsWith('<')) {
-              return {
-                file,
-                title: file,
-                date: null,
-                preview: '檔案不存在',
-              };
-            }
-            const match = text.match(/^#\s+(.+)/m);
-            const { date } = parseFrontmatter(text);
-            const preview = getPreview(text);
-            return {
-              file,
-              title: match ? match[1] : file,
-              date,
-              preview,
-            };
-          })
-        ).then((arr) => {
-          arr.sort((a, b) => (b.date || "") > (a.date || "") ? 1 : -1);
-          setPosts(arr);
-        });
-      }
+          }
+          const match = text.match(/^#\s+(.+)/m);
+          const { date } = parseFrontmatter(text);
+          const preview = getPreview(text);
+          const title = match ? match[1].trim() : file.replace('.md', '');
+          console.log(`File: ${file}, Title: ${title}`); // 除錯用
+          return {
+            file,
+            title,
+            date,
+            preview,
+          };
+        })
+      ).then((arr) => {
+        arr.sort((a, b) => (b.date || "") > (a.date || "") ? 1 : -1);
+        setPosts(arr);
+      });
     };
     
     scanMarkdownFiles();
@@ -172,25 +119,25 @@ function App() {
   useEffect(() => {
     if (posts.length > 0) {
       const newTagMap: Record<string, Post[]> = {};
-      Promise.all(
-        posts.filter(post => post.file !== 'about.md').map(async (post) => {
-          try {
-            const res = await fetch(`/posts/${post.file}`);
-            if (res.ok) {
-              const text = await res.text();
-              const { tags } = parseFrontmatter(text);
-              (tags || []).forEach((tag: string) => {
-                if (!newTagMap[tag]) newTagMap[tag] = [];
-                newTagMap[tag].push(post);
-              });
-            }
-          } catch (error) {
-            console.error(`Error fetching ${post.file}:`, error);
-          }
-        })
-      ).then(() => {
-        setTagMap(newTagMap);
-      });
+      
+      // 只處理 sample.md，因為 about.md 不需要標籤
+      const samplePost = posts.find(post => post.file === 'sample.md');
+      if (samplePost) {
+        fetch(`/posts/sample.md`)
+          .then(res => res.text())
+          .then(md => {
+            const { tags } = parseFrontmatter(md);
+            (tags || []).forEach((tag: string) => {
+              if (!newTagMap[tag]) newTagMap[tag] = [];
+              newTagMap[tag].push(samplePost);
+            });
+            setTagMap(newTagMap);
+          })
+          .catch(error => {
+            console.error('Error fetching sample.md:', error);
+            setTagMap({});
+          });
+      }
     }
   }, [posts]);
 
