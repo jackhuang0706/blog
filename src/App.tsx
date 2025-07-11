@@ -157,6 +157,10 @@ function App() {
           setSelected('sample.md');
           setShowTagsPage(false);
           setSelectedTag(null);
+        } else if (pathParam === 'tags' || pathParam === 'tags/') {
+          setShowTagsPage(true);
+          setSelected(null);
+          setSelectedTag(null);
         }
         
         // 清除 URL 參數
@@ -177,6 +181,10 @@ function App() {
           } else if (remainingPath === 'sample' || remainingPath === 'sample/') {
             setSelected('sample.md');
             setShowTagsPage(false);
+            setSelectedTag(null);
+          } else if (remainingPath === 'tags' || remainingPath === 'tags/') {
+            setShowTagsPage(true);
+            setSelected(null);
             setSelectedTag(null);
           }
         }
@@ -225,7 +233,7 @@ function App() {
       <div className="dynamic-curves"></div>
       <nav className="top-bar">
         <div className="top-bar-content">
-          <a href="/" className="top-bar-brand" onClick={(e) => {
+          <a href="/blog/" className="top-bar-brand" onClick={(e) => {
             e.preventDefault();
             setSelected(null);
             setShowTagsPage(false);
@@ -236,7 +244,7 @@ function App() {
           </a>
           <div className="top-bar-nav">
             <a 
-              href="/" 
+              href="/blog/" 
               className={!selected && !showTagsPage ? 'active' : ''}
               onClick={(e) => {
                 e.preventDefault();
@@ -248,7 +256,7 @@ function App() {
               Home
             </a>
             <a 
-              href="/about" 
+              href="/blog/about" 
               className={selected === 'about.md' ? 'active' : ''}
               onClick={(e) => {
                 e.preventDefault();
@@ -265,7 +273,7 @@ function App() {
               </a>
               <div className="dropdown-content">
                 {posts.filter(post => post.file !== 'about.md').map(post => (
-                  <a href="#" key={post.file} onClick={e => {
+                  <a href={`/blog/${post.file.replace('.md', '')}`} key={post.file} onClick={e => {
                     e.preventDefault();
                     setSelected(post.file);
                     setShowTagsPage(false);
@@ -275,7 +283,7 @@ function App() {
               </div>
             </div>
             <a 
-              href="#"
+              href="/blog/tags"
               className={showTagsPage ? 'active' : ''}
               onClick={e => {
                 e.preventDefault();
