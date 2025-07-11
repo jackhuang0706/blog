@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; url=/blog/" />
     <script>
       // 讓 SPA 路由能正確 fallback
       var l = window.location;
       var path = l.pathname.replace(/^\/blog\//, '');
       if (path && path !== 'index.html') {
         window.location.replace('/blog/?p=' + encodeURIComponent(path + l.search + l.hash));
+      } else {
+        window.location.replace('/blog/');
       }
     </script>
   </head>
