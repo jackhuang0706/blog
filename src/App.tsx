@@ -142,6 +142,30 @@ function App() {
   }, [posts]);
 
   useEffect(() => {
+    // 處理直接 URL 訪問
+    const handleDirectAccess = () => {
+      const path = window.location.pathname;
+      const blogPath = '/blog/';
+      
+      if (path.startsWith(blogPath)) {
+        const remainingPath = path.slice(blogPath.length);
+        
+        if (remainingPath === 'about' || remainingPath === 'about/') {
+          setSelected('about.md');
+          setShowTagsPage(false);
+          setSelectedTag(null);
+        } else if (remainingPath === 'sample' || remainingPath === 'sample/') {
+          setSelected('sample.md');
+          setShowTagsPage(false);
+          setSelectedTag(null);
+        }
+      }
+    };
+    
+    handleDirectAccess();
+  }, []);
+
+  useEffect(() => {
     if (selected) {
       fetch(`/blog/posts/${selected}`)
         .then((res) => res.text())
