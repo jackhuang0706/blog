@@ -76,13 +76,26 @@ function App() {
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
     const scanMarkdownFiles = async () => {
-      // 使用已知檔案列表，避免 API 404 錯誤
-      const knownFiles = ["about.md", "sample.md", "test.md"];
+      // 嘗試從 posts.json 獲取檔案列表
+      let files: string[] = [];
       
-      console.log('Loading files:', knownFiles);
+      try {
+        const response = await fetch('/blog/posts/posts.json');
+        if (response.ok) {
+          files = await response.json();
+          console.log('Loaded files from posts.json:', files);
+        } else {
+          // 如果 posts.json 不存在，使用預設檔案列表
+          files = ["about.md", "sample.md", "test.md"];
+          console.log('posts.json not found, using default files:', files);
+        }
+      } catch (error) {
+        console.log('Error loading posts.json, using default files');
+        files = ["about.md", "sample.md", "test.md"];
+      }
       
       Promise.all(
-        knownFiles.map(async (file) => {
+        files.map(async (file) => {
           const res = await fetch(`/blog/posts/${file}`);
           let text = '';
           if (res.ok) {

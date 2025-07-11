@@ -9,6 +9,23 @@ export default defineConfig({
   plugins: [
     react(),
     {
+      name: 'generate-posts-json',
+      closeBundle() {
+        try {
+          const postsDir = path.join(__dirname, 'public', 'posts');
+          const files = fs.readdirSync(postsDir).filter(f => f.endsWith('.md')).sort();
+          fs.writeFileSync(
+            path.join(postsDir, 'posts.json'),
+            JSON.stringify(files, null, 2),
+            'utf-8'
+          );
+          console.log(`✓ Generated posts.json with ${files.length} files`);
+        } catch (error) {
+          console.error('Error generating posts.json:', error);
+        }
+      }
+    },
+    {
       name: 'posts-api',
       configureServer(server) {
         server.middlewares.use('/api/posts', (req, res) => {
