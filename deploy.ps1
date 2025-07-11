@@ -1,4 +1,4 @@
-# 部落格部署腳本
+﻿# 部落格部署腳本
 # 使用方法：在 blog 目錄下執行 .\deploy.ps1
 
 Write-Host "=== 部落格部署腳本 ===" -ForegroundColor Green
