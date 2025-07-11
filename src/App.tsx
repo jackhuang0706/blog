@@ -268,7 +268,7 @@ function App() {
             setSelected(null);
             setShowTagsPage(false);
             setSelectedTag(null);
-            navigate('/blog/');
+            navigate('/');
           }}>
             <img src="/blog/logo_of_blog.png" alt="logo" className="brand-icon" />
             Lazy Blog
@@ -282,7 +282,7 @@ function App() {
                 setSelected(null);
                 setShowTagsPage(false);
                 setSelectedTag(null);
-                navigate('/blog/');
+                navigate('/');
               }}
             >
               Home
@@ -295,7 +295,7 @@ function App() {
                 setSelected('about.md');
                 setShowTagsPage(false);
                 setSelectedTag(null);
-                navigate('/blog/about');
+                navigate('/about');
               }}
             >
               About
@@ -311,7 +311,7 @@ function App() {
                     setSelected(post.file);
                     setShowTagsPage(false);
                     setSelectedTag(null);
-                    navigate(`/blog/${post.file.replace('.md', '')}`);
+                    navigate(`/${post.file.replace('.md', '')}`);
                   }}>{post.title}</a>
                 ))}
               </div>
@@ -324,7 +324,7 @@ function App() {
                 setShowTagsPage(true);
                 setSelected(null);
                 setSelectedTag(null);
-                navigate('/blog/tags');
+                navigate('/tags');
               }}
             >
               Tags
@@ -353,7 +353,7 @@ function App() {
                   setShowTagsPage(false);
                   setSelected(null);
                   setSelectedTag(null);
-                  navigate('/blog/');
+                  navigate('/');
                 }}
               >
                 ← 回首頁
@@ -371,7 +371,7 @@ function App() {
                       style={{ cursor: 'pointer' }}
                       onClick={() => {
                         setSelectedTag(tag);
-                        navigate(`/blog/tags?tag=${encodeURIComponent(tag)}`);
+                        navigate(`/tags?tag=${encodeURIComponent(tag)}`);
                       }}
                     >
                       #{tag}
@@ -394,7 +394,7 @@ function App() {
                           setSelected(post.file);
                           setShowTagsPage(false);
                           setSelectedTag(null);
-                          navigate(`/blog/${post.file.replace('.md', '')}`);
+                          navigate(`/${post.file.replace('.md', '')}`);
                         }}>{post.title}</a>
                       </li>
                     ))}
@@ -417,7 +417,7 @@ function App() {
                   setSelected(null);
                   setShowTagsPage(false);
                   setSelectedTag(null);
-                  navigate('/blog/');
+                  navigate('/');
                 }}
               >
                 ← 回首頁
