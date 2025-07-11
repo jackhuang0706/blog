@@ -166,11 +166,15 @@ function App() {
   useEffect(() => {
     // 處理直接 URL 訪問
     const handleDirectAccess = () => {
+      console.log('Current URL:', window.location.href);
+      console.log('Current pathname:', window.location.pathname);
+      
       const urlParams = new URLSearchParams(window.location.search);
       const pathParam = urlParams.get('path');
       
       if (pathParam) {
         // 處理從 404.html 重定向過來的路徑
+        console.log('Path parameter:', pathParam);
         if (pathParam === 'about' || pathParam === 'about/') {
           setSelected('about.md');
           setShowTagsPage(false);
@@ -193,8 +197,12 @@ function App() {
         const path = window.location.pathname;
         const blogPath = '/blog/';
         
+        console.log('Direct path access:', path);
+        console.log('Blog path:', blogPath);
+        
         if (path.startsWith(blogPath)) {
           const remainingPath = path.slice(blogPath.length);
+          console.log('Remaining path:', remainingPath);
           
           if (remainingPath === 'about' || remainingPath === 'about/') {
             setSelected('about.md');
