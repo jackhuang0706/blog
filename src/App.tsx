@@ -79,7 +79,7 @@ function App() {
       try {
         // 嘗試獲取 posts 目錄的檔案列表
         // 如果無法直接獲取，則使用預設檔案列表作為備用
-        const defaultFiles = ["about.md", "sample.md", "second.md"];
+        const defaultFiles = ["about.md", "sample.md"];
         
         // 嘗試動態獲取檔案列表
         let files: string[] = [];
@@ -132,7 +132,7 @@ function App() {
       } catch (error) {
         console.error('Error scanning markdown files:', error);
         // 如果出錯，使用預設檔案列表
-        const defaultFiles = ["about.md", "sample.md", "second.md"];
+        const defaultFiles = ["about.md", "sample.md"];
         Promise.all(
           defaultFiles.map(async (file) => {
             const res = await fetch(`/posts/${file}`);
@@ -174,14 +174,18 @@ function App() {
       const newTagMap: Record<string, Post[]> = {};
       Promise.all(
         posts.filter(post => post.file !== 'about.md').map(async (post) => {
-          const res = await fetch(`/posts/${post.file}`);
-          if (res.ok) {
-            const text = await res.text();
-            const { tags } = parseFrontmatter(text);
-            (tags || []).forEach((tag: string) => {
-              if (!newTagMap[tag]) newTagMap[tag] = [];
-              newTagMap[tag].push(post);
-            });
+          try {
+            const res = await fetch(`/posts/${post.file}`);
+            if (res.ok) {
+              const text = await res.text();
+              const { tags } = parseFrontmatter(text);
+              (tags || []).forEach((tag: string) => {
+                if (!newTagMap[tag]) newTagMap[tag] = [];
+                newTagMap[tag].push(post);
+              });
+            }
+          } catch (error) {
+            console.error(`Error fetching ${post.file}:`, error);
           }
         })
       ).then(() => {
@@ -235,7 +239,7 @@ function App() {
             setShowTagsPage(false);
             setSelectedTag(null);
           }}>
-            <img src="/logo_of_blog.png" alt="logo" className="brand-icon" />
+            <img src="/blog/logo_of_blog.png" alt="logo" className="brand-icon" />
             Lazy Blog
           </a>
           <div className="top-bar-nav">

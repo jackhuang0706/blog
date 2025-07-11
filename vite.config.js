@@ -32,4 +32,12 @@ export default defineConfig({
       }
     }
   ],
+  server: {
+    proxy: {
+      '/api/posts': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+      }
+    }
+  }
 }) 
