@@ -6,7 +6,7 @@
       var l = window.location;
       var path = l.pathname.replace(/^\/blog\//, '');
       if (path && path !== 'index.html') {
-        window.location.replace('/blog/?p=' + encodeURIComponent(path + l.search + l.hash));
+        window.location.replace('/blog/' + path + l.search + l.hash);
       } else {
         window.location.replace('/blog/');
       }

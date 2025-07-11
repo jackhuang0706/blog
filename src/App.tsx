@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 
 type Post = {
@@ -74,6 +74,7 @@ function App() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [tagMap, setTagMap] = useState<Record<string, Post[]>>({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
@@ -164,65 +165,27 @@ function App() {
   }, [posts]);
 
   useEffect(() => {
-    // 處理直接 URL 訪問
-    const handleDirectAccess = () => {
-      console.log('Current URL:', window.location.href);
-      console.log('Current pathname:', window.location.pathname);
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const pathParam = urlParams.get('path') || urlParams.get('p');
-      
-      if (pathParam) {
-        // 處理從 404.html 重定向過來的路徑
-        console.log('Path parameter:', pathParam);
-        if (pathParam === 'about' || pathParam === 'about/') {
-          setSelected('about.md');
-          setShowTagsPage(false);
-          setSelectedTag(null);
-        } else if (pathParam === 'sample' || pathParam === 'sample/') {
-          setSelected('sample.md');
-          setShowTagsPage(false);
-          setSelectedTag(null);
-        } else if (pathParam === 'tags' || pathParam === 'tags/') {
-          setShowTagsPage(true);
-          setSelected(null);
-          setSelectedTag(null);
-        }
-        
-        // 清除 URL 參數
-        const newUrl = window.location.pathname;
-        window.history.replaceState({}, '', newUrl);
-      } else {
-        // 處理直接路徑訪問
-        const path = window.location.pathname;
-        const blogPath = '/blog/';
-        
-        console.log('Direct path access:', path);
-        console.log('Blog path:', blogPath);
-        
-        if (path.startsWith(blogPath)) {
-          const remainingPath = path.slice(blogPath.length);
-          console.log('Remaining path:', remainingPath);
-          
-          if (remainingPath === 'about' || remainingPath === 'about/') {
-            setSelected('about.md');
-            setShowTagsPage(false);
-            setSelectedTag(null);
-          } else if (remainingPath === 'sample' || remainingPath === 'sample/') {
-            setSelected('sample.md');
-            setShowTagsPage(false);
-            setSelectedTag(null);
-          } else if (remainingPath === 'tags' || remainingPath === 'tags/') {
-            setShowTagsPage(true);
-            setSelected(null);
-            setSelectedTag(null);
-          }
-        }
-      }
-    };
-    
-    handleDirectAccess();
-  }, []);
+    // 根據路徑自動切換內容
+    const path = location.pathname.replace(/^\//, ''); // 去掉最前面的斜線
+    if (path === '' || path === 'home') {
+      setSelected(null);
+      setShowTagsPage(false);
+      setSelectedTag(null);
+    } else if (path === 'about') {
+      setSelected('about.md');
+      setShowTagsPage(false);
+      setSelectedTag(null);
+    } else if (path === 'tags') {
+      setShowTagsPage(true);
+      setSelected(null);
+      setSelectedTag(null);
+    } else {
+      // 文章頁
+      setSelected(`${path}.md`);
+      setShowTagsPage(false);
+      setSelectedTag(null);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (selected) {
