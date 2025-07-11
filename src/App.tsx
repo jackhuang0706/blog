@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 
 type Post = {
@@ -453,4 +454,10 @@ function App() {
   );
 }
 
-export default App; 
+export default function AppWithRouter() {
+  return (
+    <BrowserRouter basename="/blog">
+      <App />
+    </BrowserRouter>
+  );
+} 
