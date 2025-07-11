@@ -81,7 +81,7 @@ function App() {
       
       Promise.all(
         defaultFiles.map(async (file) => {
-          const res = await fetch(`/posts/${file}`);
+          const res = await fetch(`/blog/posts/${file}`);
           let text = '';
           if (res.ok) {
             text = await res.text();
@@ -123,7 +123,7 @@ function App() {
       // 只處理 sample.md，因為 about.md 不需要標籤
       const samplePost = posts.find(post => post.file === 'sample.md');
       if (samplePost) {
-        fetch(`/posts/sample.md`)
+        fetch(`/blog/posts/sample.md`)
           .then(res => res.text())
           .then(md => {
             const { tags } = parseFrontmatter(md);
@@ -143,7 +143,7 @@ function App() {
 
   useEffect(() => {
     if (selected) {
-      fetch(`/posts/${selected}`)
+      fetch(`/blog/posts/${selected}`)
         .then((res) => res.text())
         .then(md => {
           // 移除 frontmatter
