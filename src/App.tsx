@@ -170,7 +170,7 @@ function App() {
       console.log('Current pathname:', window.location.pathname);
       
       const urlParams = new URLSearchParams(window.location.search);
-      const pathParam = urlParams.get('path');
+      const pathParam = urlParams.get('path') || urlParams.get('p');
       
       if (pathParam) {
         // 處理從 404.html 重定向過來的路徑
