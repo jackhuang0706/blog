@@ -86,14 +86,11 @@ function App() {
         const response = await fetch('/blog/posts/posts.json');
         if (response.ok) {
           files = await response.json();
-          console.log('Loaded files from posts.json:', files);
         } else {
           // 如果 posts.json 不存在，使用預設檔案列表
           files = ["about.md", "sample.md", "test.md"];
-          console.log('posts.json not found, using default files:', files);
         }
       } catch (error) {
-        console.log('Error loading posts.json, using default files');
         files = ["about.md", "sample.md", "test.md"];
       }
       
@@ -105,7 +102,6 @@ function App() {
             text = await res.text();
           }
           if (!res.ok || text.trim().startsWith('<')) {
-            console.log(`Failed to load ${file}`);
             return {
               file,
               title: file,
@@ -117,7 +113,6 @@ function App() {
           const { date } = parseFrontmatter(text);
           const preview = getPreview(text);
           const title = match ? match[1].trim() : file.replace('.md', '');
-          console.log(`File: ${file}, Title: ${title}`); // 除錯用
           return {
             file,
             title,
