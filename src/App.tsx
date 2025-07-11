@@ -76,11 +76,29 @@ function App() {
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
     const scanMarkdownFiles = async () => {
-      // 使用預設檔案列表，因為 GitHub Pages 無法使用 API
-      const defaultFiles = ["about.md", "sample.md"];
+      // 嘗試獲取所有 markdown 檔案
+      const knownFiles = ["about.md", "sample.md", "test.md"]; // 包含已知檔案
+      
+      // 嘗試動態獲取檔案列表，如果失敗則使用已知檔案列表
+      let files: string[] = [];
+      
+      try {
+        const response = await fetch('/blog/api/posts');
+        if (response.ok) {
+          files = await response.json();
+        } else {
+          files = knownFiles;
+        }
+      } catch (error) {
+        console.log('API not available, using known files');
+        files = knownFiles;
+      }
+      
+      // 過濾出 .md 檔案
+      files = files.filter(file => file.endsWith('.md'));
       
       Promise.all(
-        defaultFiles.map(async (file) => {
+        files.map(async (file) => {
           const res = await fetch(`/blog/posts/${file}`);
           let text = '';
           if (res.ok) {
@@ -120,24 +138,28 @@ function App() {
     if (posts.length > 0) {
       const newTagMap: Record<string, Post[]> = {};
       
-      // 只處理 sample.md，因為 about.md 不需要標籤
-      const samplePost = posts.find(post => post.file === 'sample.md');
-      if (samplePost) {
-        fetch(`/blog/posts/sample.md`)
-          .then(res => res.text())
-          .then(md => {
-            const { tags } = parseFrontmatter(md);
-            (tags || []).forEach((tag: string) => {
-              if (!newTagMap[tag]) newTagMap[tag] = [];
-              newTagMap[tag].push(samplePost);
-            });
-            setTagMap(newTagMap);
-          })
-          .catch(error => {
-            console.error('Error fetching sample.md:', error);
-            setTagMap({});
-          });
-      }
+      // 處理所有文章（除了 about.md）
+      const articlesToProcess = posts.filter(post => post.file !== 'about.md');
+      
+      Promise.all(
+        articlesToProcess.map(async (post) => {
+          try {
+            const res = await fetch(`/blog/posts/${post.file}`);
+            if (res.ok) {
+              const text = await res.text();
+              const { tags } = parseFrontmatter(text);
+              (tags || []).forEach((tag: string) => {
+                if (!newTagMap[tag]) newTagMap[tag] = [];
+                newTagMap[tag].push(post);
+              });
+            }
+          } catch (error) {
+            console.error(`Error fetching ${post.file}:`, error);
+          }
+        })
+      ).then(() => {
+        setTagMap(newTagMap);
+      });
     }
   }, [posts]);
 
