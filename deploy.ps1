@@ -39,8 +39,23 @@ try {
     exit 1
 }
 
-# 5. 推送到 GitHub
-Write-Host "5. 推送到 GitHub..." -ForegroundColor Yellow
+# 5. 先拉取遠端最新內容
+Write-Host "5. 先拉取遠端最新內容 (git pull)..." -ForegroundColor Yellow
+$pullResult = git pull origin main 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "   ✗ git pull 失敗，請手動解決衝突後再重新執行此腳本。" -ForegroundColor Red
+    Write-Host $pullResult -ForegroundColor Red
+    exit 1
+} elseif ($pullResult -match 'CONFLICT') {
+    Write-Host "   ✗ 發生合併衝突，請手動解決後再重新執行此腳本。" -ForegroundColor Red
+    Write-Host $pullResult -ForegroundColor Red
+    exit 1
+} else {
+    Write-Host "   ✓ git pull 成功" -ForegroundColor Green
+}
+
+# 6. 推送到 GitHub
+Write-Host "6. 推送到 GitHub..." -ForegroundColor Yellow
 try {
     git push origin main
     Write-Host "   ✓ 推送到 GitHub 成功" -ForegroundColor Green
@@ -49,8 +64,8 @@ try {
     exit 1
 }
 
-# 6. 本地建構（可選）
-Write-Host "6. 是否要本地建構？" -ForegroundColor Yellow
+# 7. 本地建構（可選）
+Write-Host "7. 是否要本地建構？" -ForegroundColor Yellow
 $buildResponse = Read-Host "   輸入 'y' 進行本地建構，或按 Enter 跳過"
 if ($buildResponse -eq "y") {
     Write-Host "   正在建構..." -ForegroundColor Yellow
