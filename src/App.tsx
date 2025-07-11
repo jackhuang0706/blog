@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import "./App.css";
 
 type Post = {
@@ -73,6 +73,7 @@ function App() {
   const [showTagsPage, setShowTagsPage] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [tagMap, setTagMap] = useState<Record<string, Post[]>>({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 動態掃描所有 markdown 檔案
@@ -267,6 +268,7 @@ function App() {
             setSelected(null);
             setShowTagsPage(false);
             setSelectedTag(null);
+            navigate('/blog/');
           }}>
             <img src="/blog/logo_of_blog.png" alt="logo" className="brand-icon" />
             Lazy Blog
@@ -275,11 +277,12 @@ function App() {
             <a 
               href="/blog/" 
               className={!selected && !showTagsPage ? 'active' : ''}
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault();
                 setSelected(null);
                 setShowTagsPage(false);
                 setSelectedTag(null);
+                navigate('/blog/');
               }}
             >
               Home
@@ -287,11 +290,12 @@ function App() {
             <a 
               href="/blog/about" 
               className={selected === 'about.md' ? 'active' : ''}
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault();
                 setSelected('about.md');
                 setShowTagsPage(false);
                 setSelectedTag(null);
+                navigate('/blog/about');
               }}
             >
               About
@@ -307,6 +311,7 @@ function App() {
                     setSelected(post.file);
                     setShowTagsPage(false);
                     setSelectedTag(null);
+                    navigate(`/blog/${post.file.replace('.md', '')}`);
                   }}>{post.title}</a>
                 ))}
               </div>
@@ -319,6 +324,7 @@ function App() {
                 setShowTagsPage(true);
                 setSelected(null);
                 setSelectedTag(null);
+                navigate('/blog/tags');
               }}
             >
               Tags
@@ -347,6 +353,7 @@ function App() {
                   setShowTagsPage(false);
                   setSelected(null);
                   setSelectedTag(null);
+                  navigate('/blog/');
                 }}
               >
                 ← 回首頁
@@ -362,7 +369,10 @@ function App() {
                       className="post-tag"
                       key={tag}
                       style={{ cursor: 'pointer' }}
-                      onClick={() => setSelectedTag(tag)}
+                      onClick={() => {
+                        setSelectedTag(tag);
+                        navigate(`/blog/tags?tag=${encodeURIComponent(tag)}`);
+                      }}
                     >
                       #{tag}
                     </span>
@@ -384,6 +394,7 @@ function App() {
                           setSelected(post.file);
                           setShowTagsPage(false);
                           setSelectedTag(null);
+                          navigate(`/blog/${post.file.replace('.md', '')}`);
                         }}>{post.title}</a>
                       </li>
                     ))}
@@ -406,6 +417,7 @@ function App() {
                   setSelected(null);
                   setShowTagsPage(false);
                   setSelectedTag(null);
+                  navigate('/blog/');
                 }}
               >
                 ← 回首頁
