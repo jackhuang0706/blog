@@ -166,8 +166,8 @@ function App() {
 
   useEffect(() => {
     // 根據路徑自動切換內容
-    const path = location.pathname.replace(/^\//, ''); // 去掉最前面的斜線
-    if (path === '' || path === 'home') {
+    const path = location.pathname.replace(/^\/|\/$/g, ''); // 去掉前後所有斜線
+    if (path === '' || path === 'blog') {
       setSelected(null);
       setShowTagsPage(false);
       setSelectedTag(null);
