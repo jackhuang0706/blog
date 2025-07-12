@@ -161,7 +161,7 @@ function App() {
 
   useEffect(() => {
     // 根據路徑自動切換內容
-    const path = location.pathname.replace(/^\/|\/$/g, ''); // 去掉前後所有斜線
+    const path = location.pathname.replace(/^\/blog\/|\/$/g, ''); // 去掉 /blog/ 前綴和結尾斜線
     if (path === '' || path === 'blog') {
       setSelected(null);
       setShowTagsPage(false);
@@ -194,10 +194,6 @@ function App() {
           const { tags } = parseFrontmatter(md);
           setPostTags(tags || []);
         });
-      const urlSlug = getUrlSlug(selected);
-      window.history.pushState({}, '', `/${urlSlug}`);
-    } else {
-      window.history.pushState({}, '', '/');
     }
   }, [selected]);
 
