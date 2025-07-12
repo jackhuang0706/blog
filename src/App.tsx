@@ -259,9 +259,9 @@ function App() {
               About
             </a>
             <div className="dropdown">
-              <a href="#" className={selected && posts.some(p => p.file === selected) ? 'active' : ''}>
+              <span className={selected && posts.some(p => p.file === selected) ? 'active' : ''}>
                 Archives
-              </a>
+              </span>
               <div className="dropdown-content">
                 {posts.filter(post => post.file !== 'about.md').map(post => (
                   <a href={`/blog/${post.file.replace('.md', '')}`} key={post.file} onClick={e => {

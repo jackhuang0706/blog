@@ -236,7 +236,8 @@ html, body {
   display: inline-block;
 }
 
-.dropdown > a {
+.dropdown > a,
+.dropdown > span {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -246,14 +247,17 @@ html, body {
   color: #cccccc;
   text-decoration: none;
   font-weight: 500;
+  cursor: pointer;
 }
 
-.dropdown:hover > a {
+.dropdown:hover > a,
+.dropdown:hover > span {
   color: #3b82f6;
   background: #333;
 }
 
-.dropdown > a.active {
+.dropdown > a.active,
+.dropdown > span.active {
   color: #3b82f6;
   background: #333;
 }
