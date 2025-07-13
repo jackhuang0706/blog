@@ -189,11 +189,22 @@ function App() {
       setSelected(null);
       setSelectedTag(null);
     } else {
-      // 文章頁
-      console.log('Setting to article page:', path);
-      setSelected(`${path}.md`);
-      setShowTagsPage(false);
-      setSelectedTag(null);
+      // 檢查是否為有效的文章文件
+      const articleFile = `${path}.md`;
+      const isValidArticle = posts.some(post => post.file === articleFile);
+      
+      if (isValidArticle) {
+        console.log('Setting to article page:', path);
+        setSelected(articleFile);
+        setShowTagsPage(false);
+        setSelectedTag(null);
+      } else {
+        console.log('Invalid path, redirecting to home page');
+        setSelected(null);
+        setShowTagsPage(false);
+        setSelectedTag(null);
+        navigate('/');
+      }
     }
   }, [location.pathname]);
 
