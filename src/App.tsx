@@ -199,14 +199,11 @@ function App() {
         setShowTagsPage(false);
         setSelectedTag(null);
       } else {
-        console.log('Invalid path, redirecting to home page');
-        setSelected(null);
-        setShowTagsPage(false);
-        setSelectedTag(null);
-        navigate('/');
+        console.log('Invalid path, staying on current page');
+        // 不重定向，保持當前狀態
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, posts]);
 
   useEffect(() => {
     if (selected) {
