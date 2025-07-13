@@ -161,7 +161,16 @@ function App() {
 
   useEffect(() => {
     // 根據路徑自動切換內容
-    const path = location.pathname.replace(/^\/blog\/|\/$/g, ''); // 去掉 /blog/ 前綴和結尾斜線
+    let path = location.pathname.replace(/^\/blog\/|\/$/g, ''); // 去掉 /blog/ 前綴和結尾斜線
+    
+    // 檢查是否有保存的原始路徑（來自 404.html 重定向）
+    const originalPath = sessionStorage.getItem('originalPath');
+    if (originalPath && (path === '' || path === 'blog')) {
+      path = originalPath;
+      sessionStorage.removeItem('originalPath'); // 清除保存的路徑
+      console.log('Using original path from sessionStorage:', originalPath);
+    }
+    
     console.log('Current path:', location.pathname, 'Processed path:', path);
     
     if (path === '' || path === 'blog') {
