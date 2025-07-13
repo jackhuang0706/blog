@@ -463,7 +463,6 @@ footer {
   padding: 2rem 2rem 1.5rem 2rem;
   color: #475569;
   font-size: 0.9rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: auto;
 }
 
@@ -477,6 +476,11 @@ footer {
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.home-content .post-list {
+  max-width: 100%;
+  margin: 0;
 }
 
 .post-item {
@@ -499,6 +503,10 @@ footer {
   flex-direction: column;
   gap: 0.5rem;
   backdrop-filter: blur(10px);
+}
+
+.home-content .post-item {
+  margin-bottom: 1rem;
 }
 
 .post-item:hover {
@@ -612,6 +620,58 @@ footer {
   border: none;
   box-shadow: none;
   padding: 0;
+}
+
+/* 首頁佈局 */
+.home-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-header {
+  padding: 4rem 2rem 2rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.home-content {
+  flex: 1;
+  padding: 0 2rem;
+}
+
+.posts-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.posts-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.posts-header h2 {
+  font-size: 2rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.last-update {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.post-date {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
 }
 
 /* 移除 toc-block 樣式 */
@@ -760,5 +820,18 @@ footer {
   
   .subtitle {
     font-size: 1.1rem;
+  }
+  
+  .home-header {
+    padding: 3rem 1rem 1.5rem 1rem;
+    min-height: 50vh;
+  }
+  
+  .home-content {
+    padding: 0 1rem;
+  }
+  
+  .posts-header h2 {
+    font-size: 1.5rem;
   }
 } 

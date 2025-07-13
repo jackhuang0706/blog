@@ -428,12 +428,52 @@ function App() {
         </div>
       ) : (
         // 首頁
-        <>
-          <header>
+        <div className="home-layout">
+          <header className="home-header">
             <h1>Lazy Blog</h1>
             <p className="subtitle">Fijjj的學習日記</p>
           </header>
-        </>
+          
+          <main className="home-content">
+            <div className="posts-section">
+              <div className="posts-header">
+                <h2>Latest Posts</h2>
+                <p className="last-update">Last Update: {new Date().toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</p>
+              </div>
+              
+              <div className="post-list">
+                {posts.filter(post => post.file !== 'about.md').map(post => (
+                  <button
+                    key={post.file}
+                    className="post-item"
+                    onClick={() => {
+                      setSelected(post.file);
+                      setShowTagsPage(false);
+                      setSelectedTag(null);
+                      navigate(`/${post.file.replace('.md', '')}`);
+                    }}
+                  >
+                    <div className="post-list-meta">
+                      <div className="post-title">{post.title}</div>
+                      <div className="post-preview">{post.preview}</div>
+                      {post.date && (
+                        <div className="post-date">{new Date(post.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}</div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </main>
+        </div>
       )}
       <footer>
         <span>© {new Date().getFullYear()} Lazy Blog</span>
