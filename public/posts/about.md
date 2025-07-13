@@ -1,232 +1,129 @@
 ---
 tags: [關於, 部落格, 技術, 操作說明]
+date: 2024-01-15
 ---
 
 # 關於本站
 
-歡迎來到 Lazy Blog！這是一個以學習與分享為主題的個人部落格，記錄我的技術筆記、生活隨筆與成長歷程。
+歡迎來到 **Lazy Blog**！這是一個以學習與分享為主題的個人部落格，記錄我的技術筆記、生活隨筆與成長歷程。
 
-Vibe Coding by Cursor
+## 網站架構
 
-## 網站技術架構
+### 前端技術棧
+- **框架**: React 18 + TypeScript
+- **建構工具**: Vite 7.0
+- **路由**: React Router v6
+- **樣式**: 自訂 CSS + 動態背景效果
+- **部署**: GitHub Pages + GitHub Actions CI/CD
 
-- **前端框架**：React + TypeScript
-- **建構工具**：Vite
-- **Markdown 支援**：所有文章皆以 Markdown 撰寫，方便編輯與排版
-- **樣式設計**：自訂 CSS，極簡明亮風格，支援動態背景
-- **部署方式**：靜態網站，可直接放在任意靜態主機
+### 核心功能模組
+- **文章管理**: Markdown 檔案系統
+- **標籤系統**: 自動標籤收集與分類
+- **響應式設計**: 支援桌面、平板、手機
+- **SPA 路由**: 單頁應用程式，無需重新載入
+- **動態背景**: CSS 動畫與漸層效果
 
-## 如何操作本網站
+## 技術實現原理
+
+### 文章處理流程
+1. **檔案掃描**: 動態讀取 `public/posts/` 目錄下的 `.md` 檔案
+2. **Frontmatter 解析**: 提取文章標題、日期、標籤等元數據
+3. **內容渲染**: 使用 ReactMarkdown 將 Markdown 轉換為 HTML
+4. **路由匹配**: 根據 URL 路徑動態載入對應文章
+
+### 標籤系統運作
+- 自動掃描所有文章的 frontmatter 中的 `tags` 欄位
+- 建立標籤與文章的對應關係
+- 提供標籤頁面瀏覽和篩選功能
+
+### 響應式設計
+- **桌面版**: 5列網格佈局，固定導航欄和頁腳
+- **平板版**: 3列網格佈局，自適應內容
+- **手機版**: 2列網格佈局，隱藏導航選單
+
+## 使用方法
 
 ### 新增文章
-1. 進入 `blog/public/posts/` 資料夾
-2. 新增一個 `.md` 檔案，例如 `my-new-post.md`
-3. 以 Markdown 格式撰寫內容，檔案開頭可加上 `# 標題`
-4. 存檔後重新整理網站，即可在 Archives 下拉選單中看到新文章
+1. 在 `blog/public/posts/` 目錄下建立新的 `.md` 檔案
+2. 檔案開頭加入 frontmatter：
+   ```markdown
+   ---
+   tags: [標籤1, 標籤2, 標籤3]
+   date: 2024-01-15
+   ---
+   
+   # 文章標題
+   文章內容...
+   ```
+3. 儲存後重新整理網站，文章會自動出現在首頁和 Archives 選單
 
-### 文章格式說明
+### 文章格式規範
+- **標題**: 使用 `# 標題` 格式
+- **標籤**: 在 frontmatter 中使用 `tags: [標籤1, 標籤2]` 格式
+- **日期**: 使用 `date: YYYY-MM-DD` 格式
+- **內容**: 支援完整的 Markdown 語法
 
-#### 基本結構
-```markdown
----
-tags: [標籤1, 標籤2, 標籤3]
----
+### 網站功能導覽
+- **首頁**: 顯示最新文章列表和更新日期
+- **About**: 關於本站說明（當前頁面）
+- **Archives**: 文章列表下拉選單
+- **Tags**: 標籤分類頁面
+- **GitHub Repo**: 專案原始碼連結
 
-# 文章標題
+## 部署與維護
 
-文章內容...
-```
-
-#### Frontmatter（檔案開頭的設定區塊）
-- **tags**：文章標籤，用於分類和搜尋
-  - 格式：`tags: [標籤1, 標籤2, 標籤3]`
-  - 範例：`tags: [JavaScript, React, 前端開發]`
-  - 注意：標籤會自動出現在文章底部和 Tags 頁面
-
-#### 標題格式
-- 使用 `#` 來設定標題
-- 支援 `#` 到 `######` 六個層級
-- 標題會自動生成目錄（如果需要的話）
-
-### 如何加入標籤（Tags）
-
-1. **在文章開頭加入 frontmatter**：
-```markdown
----
-tags: [技術, JavaScript, 教學]
----
-
-# 你的文章標題
-```
-
-2. **標籤規則**：
-   - 使用方括號 `[]` 包圍標籤列表
-   - 標籤之間用逗號分隔
-   - 標籤會自動出現在文章底部
-   - 可以在 Tags 頁面查看所有標籤
-
-3. **標籤建議**：
-   - 使用相關的技術關鍵字
-   - 可以加入語言標籤（如：JavaScript, Python）
-   - 可以加入主題標籤（如：教學, 心得, 工具）
-
-### 修改文章
-1. 進入 `blog/public/posts/` 資料夾
-2. 找到要修改的 `.md` 檔案，直接用編輯器修改內容
-3. 存檔後重新整理網站，變更即時生效
-
-### 刪除文章
-1. 進入 `blog/public/posts/` 資料夾
-2. 刪除對應的 `.md` 檔案
-3. 重新整理網站，該文章即會消失
-
-### 網站功能說明
-
-#### 導航功能
-- **Home**：回到首頁
-- **About**：關於本站（當前頁面）
-- **Archives**：文章列表，顯示所有文章（除了 About）
-- **Tags**：標籤頁面，可查看所有標籤和相關文章
-- **Github Repo**：專案原始碼連結
-
-#### 文章顯示
-- 文章會自動隱藏 frontmatter（兩個 `---` 中間的內容）
-- 支援完整的 Markdown 語法
-- 標籤會顯示在文章底部
-- 支援程式碼高亮
-
-#### 標籤系統
-- 在 Tags 頁面可以查看所有標籤
-- 點擊標籤可以查看該標籤下的所有文章
-- 標籤會自動收集和分類
-
-### 開發與部署
-
-#### 本地開發
+### 本地開發
 ```bash
 npm run dev          # 啟動開發伺服器
 npm run build        # 建構生產版本
 npm run preview      # 預覽建構結果
 ```
 
-#### GitHub Pages 部署
+### GitHub Pages 部署
+- 自動化部署流程
+- 每次推送到 main 分支時自動建構和部署
+- 支援 SPA 路由的 404.html 重定向
 
-##### 初始部署
-1. **確保 GitHub 專案已建立**
-   - 在 GitHub 上建立新的 repository
-   - 將本地專案推送到 GitHub
-
-2. **設定 GitHub Pages**
-   - 進入 GitHub repository 設定頁面
-   - 找到 "Pages" 選項
-   - Source 選擇 "Deploy from a branch"
-   - Branch 選擇 "gh-pages" 分支
-   - 點擊 "Save"
-
-3. **執行部署**
-```bash
-npm run deploy
-```
-
-##### 更新部署（修改文章後）
-當你新增、修改或刪除文章後，需要重新部署：
-
-1. **本地修改文章**
-   - 編輯 `blog/public/posts/` 中的 `.md` 檔案
-   - 儲存變更
-
-2. **提交到 Git**
-```bash
-git add .
-git commit -m "更新文章內容"
-git push origin main
-```
-
-3. **重新部署**
-```bash
-npm run deploy
-```
-
-##### 自動化部署（可選）
-如果想要自動化部署，可以設定 GitHub Actions：
-
-1. **建立 `.github/workflows/deploy.yml`**
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Build
-      run: npm run build
-      
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
-```
-
-#### 部署流程說明
-
-##### 手動部署流程
-1. **修改文章** → 2. **Git 提交** → 3. **執行部署** → 4. **等待更新**
-
-##### 自動部署流程（使用 GitHub Actions）
-1. **修改文章** → 2. **Git 提交並推送** → 3. **自動部署**
-
-#### 常見問題
-
-##### 部署後看不到更新
-- 檢查 GitHub Pages 設定是否正確
-- 確認 `gh-pages` 分支已更新
-- 清除瀏覽器快取
-
-##### 文章沒有出現在 Archives
-- 確認檔案副檔名是 `.md`
-- 確認檔案放在 `blog/public/posts/` 目錄
-- 重新整理網頁
-
-##### 標籤沒有顯示
-- 確認 frontmatter 格式正確
-- 確認標籤在方括號內：`tags: [標籤1, 標籤2]`
-
-#### 檔案結構說明
+### 檔案結構
 ```
 blog/
 ├── public/
-│   └── posts/          # 文章目錄
-│       ├── about.md    # 關於頁面
-│       ├── sample.md   # 範例文章
-│       └── *.md        # 其他文章
-├── src/                # 原始碼
-├── dist/               # 建構輸出（部署用）
-└── package.json        # 專案設定
+│   ├── posts/          # 文章目錄
+│   │   ├── about.md
+│   │   ├── sample.md
+│   │   └── posts.json  # 文章列表
+│   └── 404.html        # SPA 路由重定向
+├── src/
+│   ├── App.tsx         # 主要組件
+│   ├── App.css         # 樣式檔案
+│   └── main.tsx        # 應用程式入口
+└── package.json        # 專案配置
 ```
 
-#### 部署檢查清單
-- [ ] 文章已儲存到 `blog/public/posts/`
-- [ ] 文章有正確的標題（`# 標題`）
-- [ ] 標籤格式正確（`tags: [標籤1, 標籤2]`）
-- [ ] Git 已提交變更
-- [ ] 已執行 `npm run deploy`
-- [ ] GitHub Pages 設定正確
+## 特色功能
+
+### 動態背景效果
+- 漸層色彩動畫
+- 動態線條背景
+- 多層次視覺效果
+
+### 固定導航設計
+- 頂部導航欄固定顯示
+- 底部版權資訊固定顯示
+- 內容區域可滾動
+
+### 智能路由處理
+- 支援直接 URL 訪問
+- 404 頁面自動重定向
+- 保持瀏覽器歷史記錄
+
+## 技術亮點
+
+- **零依賴**: 除了 React 核心外，最小化第三方依賴
+- **效能優化**: Vite 快速建構，支援 HMR
+- **SEO 友善**: 靜態網站，搜尋引擎友好
+- **可擴展**: 模組化設計，易於添加新功能
 
 ---
 
-如有任何建議或想法，歡迎留言或聯絡我，一起讓這個部落格更豐富！ 
+*最後更新: 2024年1月15日* 
