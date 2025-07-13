@@ -3,23 +3,9 @@
   <head>
     <title>Lazy Blog</title>
     <script>
-      // 智能 SPA 路由處理
-      (function() {
-        var l = window.location;
-        var path = l.pathname;
-        
-        // 檢查是否已經在 /blog/ 路徑下
-        if (path.startsWith('/blog/')) {
-          // 如果已經在 /blog/ 路徑下，重定向到根目錄讓 React Router 處理
-          window.location.replace('/blog/');
-        } else if (path.startsWith('/')) {
-          // 如果沒有 /blog/ 前綴，添加前綴
-          window.location.replace('/blog' + path);
-        } else {
-          // 其他情況重定向到根目錄
-          window.location.replace('/blog/');
-        }
-      })();
+      // 簡單的 SPA 路由處理
+      // 直接重定向到根目錄，讓 React Router 處理所有路由
+      window.location.replace('/blog/');
     </script>
   </head>
   <body>
