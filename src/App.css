@@ -338,7 +338,7 @@ main {
   padding: 2.5rem 3rem;
   max-width: 800px;
   width: 100%;
-  margin: 2rem 0;
+  margin: 0;
   font-size: 1.1rem;
   line-height: 1.75;
   color: #334155;
@@ -561,6 +561,7 @@ footer {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  min-height: calc(100vh - 200px);
 }
 
 .sidebar {
@@ -585,10 +586,12 @@ footer {
 .reading-main {
   flex: 1;
   max-width: 800px;
+  margin-top: 0;
 }
 
 .reading-main .markdown-body {
   margin: 0;
+  padding-top: 0;
 }
 
 .powered-by {
@@ -735,10 +738,12 @@ footer {
   
   .reading-main {
     width: 100%;
+    margin-top: 0;
   }
   
   .markdown-body {
     padding: 2rem;
+    margin: 0;
   }
   
   h1 {
