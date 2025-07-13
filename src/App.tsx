@@ -437,7 +437,7 @@ function App() {
           <main>
             <div className="posts-section">
               <div className="posts-header">
-                <h2>Latest Posts</h2>
+                <h2>Posts</h2>
                 {(() => {
                   const latestPost = posts
                     .filter(post => post.file !== 'about.md' && post.date)
@@ -473,9 +473,8 @@ function App() {
                   >
                     <div className="post-list-meta">
                       <div className="post-title">{post.title}</div>
-                      <div className="post-preview">{post.preview}</div>
                       {post.date && (
-                        <div className="post-date">{new Date(post.date).toLocaleDateString('en-US', { 
+                        <div className="post-date">Last Update: {new Date(post.date).toLocaleDateString('en-US', { 
                           year: 'numeric', 
                           month: 'short', 
                           day: 'numeric' 
