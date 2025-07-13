@@ -162,20 +162,26 @@ function App() {
   useEffect(() => {
     // 根據路徑自動切換內容
     const path = location.pathname.replace(/^\/blog\/|\/$/g, ''); // 去掉 /blog/ 前綴和結尾斜線
+    console.log('Current path:', location.pathname, 'Processed path:', path);
+    
     if (path === '' || path === 'blog') {
+      console.log('Setting to home page');
       setSelected(null);
       setShowTagsPage(false);
       setSelectedTag(null);
     } else if (path === 'about') {
+      console.log('Setting to about page');
       setSelected('about.md');
       setShowTagsPage(false);
       setSelectedTag(null);
     } else if (path === 'tags') {
+      console.log('Setting to tags page');
       setShowTagsPage(true);
       setSelected(null);
       setSelectedTag(null);
     } else {
       // 文章頁
+      console.log('Setting to article page:', path);
       setSelected(`${path}.md`);
       setShowTagsPage(false);
       setSelectedTag(null);

@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Lazy Blog</title>
     <script>
-      // 簡單的 SPA 路由處理
-      var l = window.location;
-      var path = l.pathname.replace(/^\/blog\//, '');
-      
-      // 重定向到根目錄，讓 React Router 處理路由
-      window.location.replace('/blog/');
+      // 智能 SPA 路由處理
+      (function() {
+        var l = window.location;
+        var path = l.pathname;
+        
+        // 檢查是否已經在 /blog/ 路徑下
+        if (path.startsWith('/blog/')) {
+          // 如果已經在 /blog/ 路徑下，重定向到根目錄讓 React Router 處理
+          window.location.replace('/blog/');
+        } else if (path.startsWith('/')) {
+          // 如果沒有 /blog/ 前綴，添加前綴
+          window.location.replace('/blog' + path);
+        } else {
+          // 其他情況重定向到根目錄
+          window.location.replace('/blog/');
+        }
+      })();
     </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
+      <div style="text-align: center;">
+        <h2>Loading...</h2>
+        <p>Redirecting to the correct page...</p>
+      </div>
+    </div>
   </body>
 </html> 
