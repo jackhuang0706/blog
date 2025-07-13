@@ -6,6 +6,8 @@ tags: [關於, 部落格, 技術, 操作說明]
 
 歡迎來到 Lazy Blog！這是一個以學習與分享為主題的個人部落格，記錄我的技術筆記、生活隨筆與成長歷程。
 
+Vibe Coding by Cursor
+
 ## 網站技術架構
 
 - **前端框架**：React + TypeScript
