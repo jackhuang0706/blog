@@ -400,6 +400,197 @@ function App() {
                 ← 回首頁
               </button>
             </div>
+            
+            {/* 目錄 */}
+            {toc.length > 0 && (
+              <div className="sidebar-block">
+                <div className="toc">
+                  <div className="toc-title">TABLE OF CONTENT</div>
+                  {(() => {
+                    const filteredToc = toc.filter(item => item.level >= 2);
+                    
+                    return filteredToc.map((item, index) => {
+                      // 只渲染 h2 標題，其他層級通過 hover 顯示
+                      if (item.level !== 2) return null;
+                      
+                      // 找到當前標題的所有下層標題（直到下一個同級或更高級別的標題）
+                      const getSubItems = (currentLevel: number, startIndex: number) => {
+                        const subItems = [];
+                        for (let i = startIndex + 1; i < filteredToc.length; i++) {
+                          const nextItem = filteredToc[i];
+                          if (nextItem.level <= currentLevel) break;
+                          if (nextItem.level === currentLevel + 1) {
+                            subItems.push({ item: nextItem, index: i });
+                          }
+                        }
+                        return subItems;
+                      };
+                      
+                      const subItems = getSubItems(item.level, index);
+                      
+                      return (
+                        <div key={index} className="toc-item-container">
+                          <div 
+                            className={`toc-item toc-level-${item.level}`}
+                            style={{ paddingLeft: `0` }}
+                          >
+                            <a 
+                              href={`#${item.id}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                const element = document.getElementById(item.id);
+                                if (element) {
+                                  const offset = 120;
+                                  const elementPosition = element.offsetTop - offset;
+                                  window.scrollTo({
+                                    top: elementPosition,
+                                    behavior: 'smooth'
+                                  });
+                                }
+                              }}
+                            >
+                              {item.text}
+                            </a>
+                          </div>
+                          {subItems.length > 0 && (
+                            <div className="toc-sub-items">
+                              {subItems.map(({ item: subItem, index: subIndex }) => {
+                                const subSubItems = getSubItems(subItem.level, subIndex);
+                                
+                                return (
+                                  <div key={subIndex} className="toc-sub-item-container">
+                                    <div 
+                                      className={`toc-item toc-level-${subItem.level}`}
+                                      style={{ paddingLeft: `0` }}
+                                    >
+                                      <a 
+                                        href={`#${subItem.id}`}
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          const element = document.getElementById(subItem.id);
+                                          if (element) {
+                                            const offset = 120;
+                                            const elementPosition = element.offsetTop - offset;
+                                            window.scrollTo({
+                                              top: elementPosition,
+                                              behavior: 'smooth'
+                                            });
+                                          }
+                                        }}
+                                      >
+                                        {subItem.text}
+                                      </a>
+                                    </div>
+                                    {subSubItems.length > 0 && (
+                                      <div className="toc-sub-sub-items">
+                                        {subSubItems.map(({ item: subSubItem, index: subSubIndex }) => {
+                                          const subSubSubItems = getSubItems(subSubItem.level, subSubIndex);
+                                          
+                                          return (
+                                            <div key={subSubIndex} className="toc-sub-sub-item-container">
+                                              <div 
+                                                className={`toc-item toc-level-${subSubItem.level}`}
+                                                style={{ paddingLeft: `0` }}
+                                              >
+                                                <a 
+                                                  href={`#${subSubItem.id}`}
+                                                  onClick={(e) => {
+                                                    e.preventDefault();
+                                                    const element = document.getElementById(subSubItem.id);
+                                                    if (element) {
+                                                      const offset = 120;
+                                                      const elementPosition = element.offsetTop - offset;
+                                                      window.scrollTo({
+                                                        top: elementPosition,
+                                                        behavior: 'smooth'
+                                                      });
+                                                    }
+                                                  }}
+                                                >
+                                                  {subSubItem.text}
+                                                </a>
+                                              </div>
+                                              {subSubSubItems.length > 0 && (
+                                                <div className="toc-sub-sub-sub-items">
+                                                  {subSubSubItems.map(({ item: subSubSubItem, index: subSubSubIndex }) => {
+                                                    const subSubSubSubItems = getSubItems(subSubSubItem.level, subSubSubIndex);
+                                                    
+                                                    return (
+                                                      <div key={subSubSubIndex} className="toc-sub-sub-sub-item-container">
+                                                        <div 
+                                                          className={`toc-item toc-level-${subSubSubItem.level}`}
+                                                          style={{ paddingLeft: `0` }}
+                                                        >
+                                                          <a 
+                                                            href={`#${subSubSubItem.id}`}
+                                                            onClick={(e) => {
+                                                              e.preventDefault();
+                                                              const element = document.getElementById(subSubSubItem.id);
+                                                              if (element) {
+                                                                const offset = 120;
+                                                                const elementPosition = element.offsetTop - offset;
+                                                                window.scrollTo({
+                                                                  top: elementPosition,
+                                                                  behavior: 'smooth'
+                                                                });
+                                                              }
+                                                            }}
+                                                          >
+                                                            {subSubSubItem.text}
+                                                          </a>
+                                                        </div>
+                                                        {subSubSubSubItems.length > 0 && (
+                                                          <div className="toc-sub-sub-sub-sub-items">
+                                                            {subSubSubSubItems.map(({ item: subSubSubSubItem, index: subSubSubSubIndex }) => (
+                                                              <div key={subSubSubSubIndex} className="toc-sub-sub-sub-sub-item-container">
+                                                                <div 
+                                                                  className={`toc-item toc-level-${subSubSubSubItem.level}`}
+                                                                  style={{ paddingLeft: `0` }}
+                                                                >
+                                                                  <a 
+                                                                    href={`#${subSubSubSubItem.id}`}
+                                                                    onClick={(e) => {
+                                                                      e.preventDefault();
+                                                                      const element = document.getElementById(subSubSubSubItem.id);
+                                                                      if (element) {
+                                                                        const offset = 120;
+                                                                        const elementPosition = element.offsetTop - offset;
+                                                                        window.scrollTo({
+                                                                          top: elementPosition,
+                                                                          behavior: 'smooth'
+                                                                        });
+                                                                      }
+                                                                    }}
+                                                                  >
+                                                                    {subSubSubSubItem.text}
+                                                                  </a>
+                                                                </div>
+                                                              </div>
+                                                            ))}
+                                                          </div>
+                                                        )}
+                                                      </div>
+                                                    );
+                                                  })}
+                                                </div>
+                                              )}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
+            )}
           </aside>
           <main className="reading-main">
             <article className="markdown-body">
@@ -488,7 +679,7 @@ function App() {
           </main>
         </>
       )}
-      <footer>
+      <footer className={!selected && !showTagsPage ? '' : 'other-pages'}>
         <span>© {new Date().getFullYear()} Lazy Blog</span>
         <span className="powered-by">Powered by React & Vite</span>
       </footer>

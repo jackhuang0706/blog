@@ -459,6 +459,7 @@ main {
   font-weight: 600;
 }
 
+/* 主頁footer樣式 - 保持原有的黑底配置 */
 footer {
   text-align: center;
   padding: 2rem 2rem 1.5rem 2rem;
@@ -472,6 +473,50 @@ footer {
   left: 0;
   width: 100%;
   z-index: 100;
+}
+
+/* 其他頁面的footer樣式 - 無黑底，無框線，只放在頁面底部 */
+footer.other-pages {
+  background: transparent;
+  border-top: none;
+  position: static;
+  color: #64748b;
+  padding: 2rem 2rem 1rem 2rem;
+  margin-top: 2rem;
+}
+
+/* 確保其他頁面的內容區域有足夠的底部間距 */
+.reading-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  min-height: calc(100vh - 200px);
+  margin-bottom: 2rem; /* 為其他頁面的footer留出空間 */
+}
+
+.sidebar {
+  position: sticky;
+  top: 6rem;
+  width: 300px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  height: fit-content;
+  backdrop-filter: none;
+}
+
+.sidebar h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
 }
 
 .post-list {
@@ -551,47 +596,15 @@ footer {
   color: #475569;
 }
 
-.reading-layout {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 3rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  min-height: calc(100vh - 200px);
-}
-
-.sidebar {
-  position: sticky;
-  top: 6rem;
-  width: 250px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
-  height: fit-content;
-  backdrop-filter: blur(10px);
-}
-
-.sidebar h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #1e293b;
-}
-
 .reading-main {
   flex: 1;
   max-width: 800px;
-  margin-top: 0;
+  margin-top: 1rem; /* 減少頂部間距，讓文章內容框往上移一點 */
 }
 
 .reading-main .markdown-body {
   margin: 0;
-  padding-top: 0;
+  padding-top: 2rem; /* 為tags頁面添加頂部間距 */
 }
 
 .powered-by {
@@ -612,17 +625,18 @@ footer {
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
   border: 1px solid #e2e8f0;
   padding: 2rem 1rem 1.2rem 1rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0; /* 移除底部間距，因為這是最後一個區塊 */
   text-align: center;
 }
 
 .sidebar-header-block {
   text-align: center;
-  margin-bottom: 0;
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
+  margin-bottom: 1.5rem; /* 為目錄區塊留出間距 */
+  background: rgba(255,255,255,0.95);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+  border: 1px solid #e2e8f0;
+  padding: 2rem 1rem 1.2rem 1rem;
 }
 
 .posts-section {
@@ -655,39 +669,115 @@ footer {
   margin-top: 0.5rem;
 }
 
-/* 移除 toc-block 樣式 */
-
+/* 目錄樣式 */
 .toc {
-  margin: 2.5rem 0 0 0;
+  margin: 0.5rem 0 0 0;
   padding: 0;
   background: none;
   border: none;
   box-shadow: none;
 }
+
 .toc-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 0.7rem;
+  margin-bottom: 1rem;
   color: #1e293b;
+  text-align: center;
 }
-.toc-list {
-  list-style: disc inside;
-  padding-left: 0.5rem;
-  margin: 0;
+
+.toc-item {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  padding-left: 0;
 }
-.toc-list li {
+
+.toc-sub-items .toc-item {
   margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  text-align: center;
 }
-.toc-list a {
-  color: #334155;
+
+.toc-item a {
+  color: #475569;
   text-decoration: none;
-  font-size: 1rem;
-  transition: none;
+  transition: color 0.2s;
+  display: block;
+  padding: 0;
+  border-radius: 0;
+  text-align: center;
 }
-.toc-list a:hover {
-  color: #334155;
+
+/* 不同層級的字體大小 */
+.toc-level-2 a {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.toc-level-3 a {
+  font-size: 1.1rem;
+}
+
+.toc-level-4 a {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.toc-level-5 a {
+  font-size: 0.9rem;
+}
+
+.toc-level-6 a {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.toc-item a:hover {
+  color: #3b82f6;
   text-decoration: underline;
   background: none;
+}
+
+.toc-item-container {
+  position: relative;
+}
+
+.toc-sub-items {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.toc-item-container:hover .toc-sub-items {
+  display: block;
+}
+
+/* 新增更多層級的樣式 */
+.toc-sub-sub-items {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.toc-sub-item-container:hover .toc-sub-sub-items {
+  display: block;
+}
+
+.toc-sub-sub-sub-items {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.toc-sub-sub-item-container:hover .toc-sub-sub-sub-items {
+  display: block;
+}
+
+.toc-sub-sub-sub-sub-items {
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.toc-sub-sub-sub-item-container:hover .toc-sub-sub-sub-sub-items {
+  display: block;
 }
 
 .back-btn {
@@ -698,6 +788,7 @@ footer {
 
 .post-tags {
   margin-bottom: 1.5rem;
+  margin-top: 2rem; /* 為tags頁面添加頂部間距 */
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
