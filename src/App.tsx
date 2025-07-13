@@ -428,21 +428,35 @@ function App() {
         </div>
       ) : (
         // 首頁
-        <div className="home-layout">
-          <header className="home-header">
+        <>
+          <header>
             <h1>Lazy Blog</h1>
             <p className="subtitle">Fijjj的學習日記</p>
           </header>
           
-          <main className="home-content">
+          <main>
             <div className="posts-section">
               <div className="posts-header">
                 <h2>Latest Posts</h2>
-                <p className="last-update">Last Update: {new Date().toLocaleDateString('en-US', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}</p>
+                {(() => {
+                  const latestPost = posts
+                    .filter(post => post.file !== 'about.md' && post.date)
+                    .sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime())[0];
+                  
+                  return latestPost ? (
+                    <p className="last-update">Last Update: {new Date(latestPost.date!).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}</p>
+                  ) : (
+                    <p className="last-update">Last Update: {new Date().toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}</p>
+                  );
+                })()}
               </div>
               
               <div className="post-list">
@@ -473,7 +487,7 @@ function App() {
               </div>
             </div>
           </main>
-        </div>
+        </>
       )}
       <footer>
         <span>© {new Date().getFullYear()} Lazy Blog</span>
