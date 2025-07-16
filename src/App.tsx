@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 type Post = {
   file: string;
@@ -595,6 +599,8 @@ function App() {
           <main className="reading-main">
             <article className="markdown-body">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
                 components={{
                   h1: createHeading(1),
                   h2: createHeading(2),
