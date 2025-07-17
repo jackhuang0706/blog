@@ -79,6 +79,7 @@ function App() {
   const [showTagsPage, setShowTagsPage] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [tagMap, setTagMap] = useState<Record<string, Post[]>>({});
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -225,6 +226,14 @@ function App() {
         });
     }
   }, [selected]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // 產生帶 id 的 heading
   function createHeading(level: number) {
@@ -704,6 +713,16 @@ function App() {
             </div>
           </main>
         </>
+      )}
+      {/* 回到頂部按鈕 */}
+      {showScrollTop && (
+        <button
+          className="scroll-to-top-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="回到頂部"
+        >
+          回到頂部
+        </button>
       )}
       <footer className={!selected && !showTagsPage ? '' : 'other-pages'}>
         <span>© {new Date().getFullYear()} Lazy Blog</span>
