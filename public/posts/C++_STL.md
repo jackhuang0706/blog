@@ -121,7 +121,16 @@ l.traverse();
 int s=l.length(); */
 ```
 
-## Heap
+## 堆積（Heap）
+堆積是一種樹狀資料結構，通常用於實現 Top k 的問題。若以 Binary Heap 來說，它必然是一棵完全二元樹（Complete Binary Tree），其中每個母節點的值會和子節點有一定的相關性，可以是母節點必大於子節點（Max Heap）或必小於子節點（Min Heap），同時 priority_queue 便是利用 Heap 的原理來建立的資料結構。
+
+### Binary Heap（Max Heap & Min Heap）
+功能：
+- 建立堆積（build）：$O(n)$
+- 插入新節點（push）：$O(\log n)$
+- 查詢樹根（堆積裡的 Max or Min 值）（top）：$O(1)$
+- 刪除樹根（pop）：$O(\log n)$
+
 
 ## Treap
 
@@ -139,7 +148,8 @@ int s=l.length(); */
 - [cpp reference](https://cplusplus.com/reference/)
 - [C++ 資料結構 (Data Structure)](https://andyli.tw/data-structure/)
 - [資料結構學習筆記 — 1. Singly Linked List 單向資料鏈結](https://medium.com/@amber.fragments/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B-%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-1-singly-linked-list-%E5%96%AE%E5%90%91%E8%B3%87%E6%96%99%E9%8F%88%E7%B5%90-c5bb83e3f75d)
-
-## 補洞
+- [資料結構大便當： Binary Heap](https://medium.com/@Kadai/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E5%A4%A7%E4%BE%BF%E7%95%B6-binary-heap-ec47ca7aebac)
+- [二元堆積 (Binary Heap)、最小堆積 (Min Heap) 與最大堆積 (Max Heap)](https://www.shubo.io/binary-heap/)
+## 待補洞
 - 構造函數
 - 析構函數
