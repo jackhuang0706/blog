@@ -1,6 +1,6 @@
 ---
-tags: [Data Structure,C++]
-date: 2025-07-16
+tags: [C++,Data Structure]
+date: 2025-07-19
 ---
 
 # C++ 資料結構
@@ -131,6 +131,76 @@ int s=l.length(); */
 - 查詢樹根（堆積裡的 Max or Min 值）（top）：$O(1)$
 - 刪除樹根（pop）：$O(\log n)$
 
+#### Code
+```cpp
+/* 額外引入標頭檔
+#include <vector>
+#include <stdexcept>
+*/
+
+// 以 max-heap 為例
+class max_heap {
+private:
+    vector<int> tree;
+
+    void heapify(int root, int len) { // 由上往下重新整理 Heap 結構
+        int lc = 2 * root + 1;
+        int rc = 2 * root + 2;
+        int largest = root;
+
+        if (lc < len && tree[largest] < tree[lc]) {
+            largest = lc;
+        }
+        if (rc < len && tree[largest] < tree[rc]) {
+            largest = rc;
+        }
+        if (largest != root) {
+            swap(tree[root], tree[largest]);
+            heapify(largest, len);
+        }
+    }
+
+public:
+    void build(const vector<int>& arr) { // 建立 Heap 結構
+        tree = arr;
+        int start = (int)tree.size() / 2 - 1;
+        int len = tree.size();
+        for (int cur = start; cur >= 0; cur--) {
+            heapify(cur, len);
+        }
+    }
+
+    void push(int val) { // 加入新 Data
+        tree.emplace_back(val);
+        int cur = (int)tree.size() - 1;
+        int parent = (cur - 1) / 2;
+        while (cur > 0 && tree[cur] > tree[parent]) {
+            swap(tree[parent], tree[cur]);
+            cur = parent;
+            parent = (cur - 1) / 2;
+        }
+    }
+
+    void pop() { // 刪除根節點
+        if (tree.empty()) {
+            throw runtime_error("empty heap"); // 丟出異常
+        }
+        tree[0] = tree.back();
+        tree.pop_back();
+        if (tree.empty()) {
+            return;
+        }
+        heapify(0, (int)tree.size());
+    }
+
+    int top() const { // 查詢根節點
+        if (tree.empty()) {
+            throw runtime_error("empty heap"); // 丟出異常
+        }
+        return tree[0];
+    }
+};
+```
 
 ## Treap
 
@@ -150,6 +220,7 @@ int s=l.length(); */
 - [資料結構學習筆記 — 1. Singly Linked List 單向資料鏈結](https://medium.com/@amber.fragments/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B-%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-1-singly-linked-list-%E5%96%AE%E5%90%91%E8%B3%87%E6%96%99%E9%8F%88%E7%B5%90-c5bb83e3f75d)
 - [資料結構大便當： Binary Heap](https://medium.com/@Kadai/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E5%A4%A7%E4%BE%BF%E7%95%B6-binary-heap-ec47ca7aebac)
 - [二元堆積 (Binary Heap)、最小堆積 (Min Heap) 與最大堆積 (Max Heap)](https://www.shubo.io/binary-heap/)
+- [來征服資料結構與演算法吧 | 搞懂 Binary Heap 的排序原理](https://medium.com/starbugs/%E4%BE%86%E5%BE%81%E6%9C%8D%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E8%88%87%E6%BC%94%E7%AE%97%E6%B3%95%E5%90%A7-%E6%90%9E%E6%87%82-binary-heap-%E7%9A%84%E6%8E%92%E5%BA%8F%E5%8E%9F%E7%90%86-96768ea30d3f)
 ## 待補洞
 - 構造函數
 - 析構函數
