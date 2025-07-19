@@ -27,7 +27,6 @@ Linked List 是一個含 Head 及 Tail 的資料結構，由一連串的節點�
 - 刪除節點（pop）：最壞 $O(n)$
 - 遍歷節點（traverse）：$O(n)$
 
-#### Code
 ```cpp
 class node { // 定義節點型態
     friend class linked_list;
@@ -131,7 +130,6 @@ int s=l.length(); */
 - 查詢樹根（堆積裡的 Max or Min 值）（top）：$O(1)$
 - 刪除樹根（pop）：$O(\log n)$
 
-#### Code
 ```cpp
 /* 額外引入標頭檔
 #include <vector>

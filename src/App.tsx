@@ -54,15 +54,32 @@ function getFilenameFromSlug(slug: string): string {
   return slug.endsWith('.md') ? slug : `${slug}.md`;
 }
 
+
+
+// 用於生成 ID 的輔助函數
+function generateId(text: string, existingIds: Set<string>): string {
+  let baseId = text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/(^-|-$)/g, '');
+  let finalId = baseId;
+  let counter = 0;
+  
+  while (existingIds.has(finalId)) {
+    counter++;
+    finalId = `${baseId}-${counter}`;
+  }
+  
+  existingIds.add(finalId);
+  return finalId;
+}
+
 function extractToc(md: string): TocItem[] {
   const lines = md.split(/\r?\n/);
   const toc: TocItem[] = [];
+  
   for (const line of lines) {
     const match = line.match(/^(#{1,6})\s+(.+)/);
     if (match) {
       const level = match[1].length;
       const text = match[2].trim();
-      // 產生 id，與 markdown-it-anchor 類似
       const id = text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/(^-|-$)/g, '');
       toc.push({ text, level, id });
     }
@@ -75,6 +92,8 @@ function App() {
   const [selected, setSelected] = useState<string | null>(null);
   const [markdown, setMarkdown] = useState<string>("");
   const [toc, setToc] = useState<TocItem[]>([]);
+  const [headingIdMap, setHeadingIdMap] = useState<Map<string, string>>(new Map());
+ 
   const [postTags, setPostTags] = useState<string[]>([]);
   const [showTagsPage, setShowTagsPage] = useState(false);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -205,6 +224,8 @@ function App() {
         setSelected(articleFile);
         setShowTagsPage(false);
         setSelectedTag(null);
+        
+
       } else {
         console.log('Invalid path, staying on current page');
         // 不重定向，保持當前狀態
@@ -220,7 +241,11 @@ function App() {
           // 移除 frontmatter
           const contentWithoutFrontmatter = md.replace(/^---[\s\S]*?---\s*/, '');
           setMarkdown(contentWithoutFrontmatter);
-          setToc(extractToc(contentWithoutFrontmatter));
+          
+          // 生成 TOC
+          const newToc = extractToc(contentWithoutFrontmatter);
+          setToc(newToc);
+          
           const { tags } = parseFrontmatter(md);
           setPostTags(tags || []);
         });
@@ -235,6 +260,19 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // 處理目錄點擊事件
+  function handleTocClick(item: TocItem) {
+    const element = document.getElementById(item.id);
+    if (element) {
+      const offset = 120;
+      const elementPosition = element.offsetTop - offset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+
   // 產生帶 id 的 heading
   function createHeading(level: number) {
     return function Heading(props: any) {
@@ -245,6 +283,7 @@ function App() {
       } else if (typeof children === 'string') {
         text = children;
       }
+      
       const id = text.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/(^-|-$)/g, '');
       return React.createElement(`h${level}`, { id }, children);
     };
@@ -453,15 +492,7 @@ function App() {
                               href={`#${item.id}`}
                               onClick={(e) => {
                                 e.preventDefault();
-                                const element = document.getElementById(item.id);
-                                if (element) {
-                                  const offset = 120;
-                                  const elementPosition = element.offsetTop - offset;
-                                  window.scrollTo({
-                                    top: elementPosition,
-                                    behavior: 'smooth'
-                                  });
-                                }
+                                handleTocClick(item);
                               }}
                             >
                               {item.text}
@@ -482,15 +513,7 @@ function App() {
                                         href={`#${subItem.id}`}
                                         onClick={(e) => {
                                           e.preventDefault();
-                                          const element = document.getElementById(subItem.id);
-                                          if (element) {
-                                            const offset = 120;
-                                            const elementPosition = element.offsetTop - offset;
-                                            window.scrollTo({
-                                              top: elementPosition,
-                                              behavior: 'smooth'
-                                            });
-                                          }
+                                          handleTocClick(subItem);
                                         }}
                                       >
                                         {subItem.text}
@@ -511,15 +534,7 @@ function App() {
                                                   href={`#${subSubItem.id}`}
                                                   onClick={(e) => {
                                                     e.preventDefault();
-                                                    const element = document.getElementById(subSubItem.id);
-                                                    if (element) {
-                                                      const offset = 120;
-                                                      const elementPosition = element.offsetTop - offset;
-                                                      window.scrollTo({
-                                                        top: elementPosition,
-                                                        behavior: 'smooth'
-                                                      });
-                                                    }
+                                                    handleTocClick(subSubItem);
                                                   }}
                                                 >
                                                   {subSubItem.text}
@@ -540,15 +555,7 @@ function App() {
                                                             href={`#${subSubSubItem.id}`}
                                                             onClick={(e) => {
                                                               e.preventDefault();
-                                                              const element = document.getElementById(subSubSubItem.id);
-                                                              if (element) {
-                                                                const offset = 120;
-                                                                const elementPosition = element.offsetTop - offset;
-                                                                window.scrollTo({
-                                                                  top: elementPosition,
-                                                                  behavior: 'smooth'
-                                                                });
-                                                              }
+                                                              handleTocClick(subSubSubItem);
                                                             }}
                                                           >
                                                             {subSubSubItem.text}
@@ -562,21 +569,13 @@ function App() {
                                                                   className={`toc-item toc-level-${subSubSubSubItem.level}`}
                                                                   style={{ paddingLeft: `0` }}
                                                                 >
-                                                                  <a 
-                                                                    href={`#${subSubSubSubItem.id}`}
-                                                                    onClick={(e) => {
-                                                                      e.preventDefault();
-                                                                      const element = document.getElementById(subSubSubSubItem.id);
-                                                                      if (element) {
-                                                                        const offset = 120;
-                                                                        const elementPosition = element.offsetTop - offset;
-                                                                        window.scrollTo({
-                                                                          top: elementPosition,
-                                                                          behavior: 'smooth'
-                                                                        });
-                                                                      }
-                                                                    }}
-                                                                  >
+                                                                                                                                      <a 
+                                                                      href={`#${subSubSubSubItem.id}`}
+                                                                      onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        handleTocClick(subSubSubSubItem);
+                                                                      }}
+                                                                    >
                                                                     {subSubSubSubItem.text}
                                                                   </a>
                                                                 </div>
